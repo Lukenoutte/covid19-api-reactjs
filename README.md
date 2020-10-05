@@ -6,8 +6,6 @@ Um site com objetivo de trazer informações sobre a pandemia de forma simples e
 
 🔌 API: https://www.xapix.io/covid-19-initiative
 
-API Rest (Axios)
-
 ## :heart_decoration: Stack
 
   - React
