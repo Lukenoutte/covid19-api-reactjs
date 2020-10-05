@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-import './App.css';
-import Display from './components/SimpleCard';
-import WorldCard from './components/WorldCard';
+import Error from './components/Error';
 import Footer from './components/Footer';
-import { ExpandLess, Add } from '@material-ui/icons';
+import Header from './components/Header';
+import ListCard from './components/ListCard';
+import ScrollToTop from './components/ScrollToTop';
+import Spinner from './components/Spinner';
+import SimpleCard from './components/SimpleCard';
+import WorldCard from './components/WorldCard';
+import GlobalStyle from './styles/global';
 
 function App() {
   const [dataFromApi, setDataFromApi] = useState(false);
@@ -44,19 +48,12 @@ function App() {
       setLoopSizeFromCards(loopSizeFromCards + 8);
   }
 
-  function scrollToTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  }
-
   function generateCardDivs() {
     var cardsDivs = [];
 
     for (let i = 0; i < loopSizeFromCards; i++) {
       cardsDivs.push(
-        <Display key={i} dataProps={sortLocationsArray()[i]}></Display>
+        <SimpleCard key={i} dataProps={sortLocationsArray()[i]} />
       );
     }
 
@@ -64,62 +61,30 @@ function App() {
   }
 
   return (
-    <div className="app flex-just-center">
-      <header>
-        <a href="/" title="Data Covid">
-          <h1>
-            <p>data</p>COVID
-          </h1>
-        </a>
-      </header>
+    <>
+      <GlobalStyle />
+      <div className="app flex-just-center">
+        <Header />
+        <Spinner isLoading={isLoading} error={error} />
+        <Error isLoading={isLoading} error={error} />
 
-      {isLoading && !error && (
-        /* Anel de carregamento */
-        /* https://loading.io */
-        <div className="loading-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-        /* Fim do anel de carregamento */
-      )}
-      {isLoading && error !== false &&
-      /*Erro */
-      <div className="error-div">
-      <h2>Ops! Ocorreu um erro :(</h2>
+        {!isLoading && (
+          <>
+            <WorldCard dataProps={dataFromApi}></WorldCard>
+            <ListCard 
+              dataFromApi={dataFromApi} 
+              focusElement={focusElement}
+              generateCardDivs={generateCardDivs} 
+              loopSizeFromCards={loopSizeFromCards} 
+              onClick={increaceLoopSize} 
+            />
+          </>
+        )}
+
+        <ScrollToTop loopSizeFromCards={loopSizeFromCards} />
+        <Footer></Footer>
       </div>
-      }
-
-      {!isLoading && (
-        <>
-          <WorldCard dataProps={dataFromApi}></WorldCard>
-
-          <div ref={focusElement} tabIndex="0" className="all-cards flex-just-center">
-            {generateCardDivs() /* Todos os Cards */}
-
-            <div className="button-plus-div flex-just-alig-center">
-              {loopSizeFromCards < 260 && dataFromApi !== false ? (
-                <button className="flex-just-alig-center" title="Ver mais" onClick={increaceLoopSize}>
-                  <Add></Add>
-                </button>
-              ) : (
-                false
-              )}
-            </div>
-          </div>
-        </>
-      )}
-
-      {loopSizeFromCards > 30 ? (
-        <div className="button-scrolltop-div">
-          <button className="flex-just-alig-center" title="Subir" onClick={scrollToTop}>
-            <ExpandLess className="icon"></ExpandLess>
-          </button>
-        </div>
-      ) : (false)}
-
-      <Footer></Footer>
-    </div>
+    </>
   );
 }
 

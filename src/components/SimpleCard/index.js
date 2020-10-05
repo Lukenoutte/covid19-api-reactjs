@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import Card from './styles';
 
-import './SimpleCard.css';
-import BodySimpleCard from './BodySimpleCard';
-export default (props) => {
+import BodySimpleCard from '../BodySimpleCard';
+
+export default ({dataProps}) => {
   const [countryData, setCountryData] = useState(false);
 
   return (
-    <div className="simple-card">
-      {!countryData && setCountryData(props.dataProps)}
+    <Card>
+      {!countryData && setCountryData(dataProps)}
 
       {countryData /* Evita que chame locations undefined */ && (
         <>
@@ -18,9 +19,9 @@ export default (props) => {
 
           </div>
 
-          <BodySimpleCard dataProps={countryData}></BodySimpleCard>
+          <BodySimpleCard dataProps={countryData} />
         </>
       )}
-    </div>
+    </Card>
   );
 };
