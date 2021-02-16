@@ -19,22 +19,25 @@ function App() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-
-    axios({
-      method: 'GET',
-      url: 'https://covid19api.xapix.io/v2/locations',
-    }).then((res) => {
-      setDataFromApi(res.data);
-      setIsLoading(false);
-    }).catch(error => {
-      if(error.status){
-        setError(error.status);
-      }else{
-        setError(error);
-      }
-
-     });
-  }, []);
+    if (dataFromApi === false) {
+      axios({
+        method: 'GET',
+        url: 'https://covid19api.xapix.io/v2/locations',
+      })
+        .then((res) => {
+          console.log(res.data);
+          setDataFromApi(res.data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          if (error.status) {
+            setError(error.status);
+          } else {
+            setError(error);
+          }
+        });
+    }
+  }, [dataFromApi]);
 
   function sortLocationsArray() {
     return Object.values(dataFromApi.locations).sort((a, b) =>
@@ -71,12 +74,12 @@ function App() {
         {!isLoading && (
           <>
             <WorldCard dataProps={dataFromApi}></WorldCard>
-            <ListCard 
-              dataFromApi={dataFromApi} 
+            <ListCard
+              dataFromApi={dataFromApi}
               focusElement={focusElement}
-              generateCardDivs={generateCardDivs} 
-              loopSizeFromCards={loopSizeFromCards} 
-              onClick={increaceLoopSize} 
+              generateCardDivs={generateCardDivs}
+              loopSizeFromCards={loopSizeFromCards}
+              onClick={increaceLoopSize}
             />
           </>
         )}
