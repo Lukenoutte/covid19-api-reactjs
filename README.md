@@ -2,7 +2,6 @@
 
 Um site com objetivo de trazer informações sobre a pandemia de forma simples e objetiva.
 
-💻 Site demo: https://datacovid.netlify.app
 
 🔌 API: https://www.xapix.io/covid-19-initiative
 
